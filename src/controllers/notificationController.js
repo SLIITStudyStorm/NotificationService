@@ -26,3 +26,16 @@ exports.sendNotification = async (req, res) => {
     res.status(500).send('An error occurred while sending the notifications.');
   }
 };
+
+exports.getNotifications = async (req, res) => {
+  const { email } = req.query;
+  try {
+    const notifications = await Notification.find({ email});
+    res.status(200).json(notifications);
+  }
+  catch (error) {
+    console.error('Error:', error);
+    res.status(500).send('An error occurred while fetching the notifications.');
+  }
+}
+
