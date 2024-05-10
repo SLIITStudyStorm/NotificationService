@@ -1,46 +1,23 @@
 const express = require('express');
-const emailSender = require('./src/emailSender');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const notificationRoutes = require('./src/routes/notificationRoutes');
 
 const app = express();
-app.use(express.json());
+const PORT = process.env.PORT || 4000;
 
-app.get('/', (req, res) => {
-  res.send('Hello World');
+// Parse JSON bodies
+app.use(bodyParser.json());
+
+// MongoDB connection
+mongoose.connect('mongodb+srv://avishkanuwan73:12345Avishka@cluster0.ijwojwx.mongodb.net/test', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 });
 
-// email send route
-app.post('/send-emails', (req, res) => {
-    const { recipientEmails, emailSubject, emailText } = req.body;
+// Routes
+app.use('/', notificationRoutes);
 
-    // Validate the request body
-    if (!Array.isArray(recipientEmails) || !recipientEmails.length) {
-        return res.status(400).send('Invalid request body.');
-    }
-
-    // Send emails asynchronously
-    const emailPromises = recipientEmails.map(recipientEmail => {
-        return emailSender(recipientEmail, emailSubject, emailText);
-    });
-
-    Promise.all(emailPromises)
-        .then(results => {
-            // Check if any email sending failed
-            const success = results.every(result => result === true);
-            if (success) {
-                res.send('Emails sent successfully.');
-            } else {
-                res.status(500).send('Some emails failed to send.');
-            }
-        })
-        .catch(error => {
-            console.error('Error sending emails:', error);
-            res.status(500).send('Error sending emails.');
-        });
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
-
-
-
-app.listen(4000, () => {
-    console.log('Server is running on port 4000');
-    });
-
