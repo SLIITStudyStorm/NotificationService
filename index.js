@@ -1,7 +1,7 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const notificationRoutes = require('./src/routes/notificationRoutes');
+const express = require("express");
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+const notificationRoutes = require("./src/routes/notificationRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -10,13 +10,15 @@ const PORT = process.env.PORT || 4000;
 app.use(bodyParser.json());
 
 // MongoDB connection
-mongoose.connect('mongodb+srv://avishkanuwan73:12345Avishka@cluster0.ijwojwx.mongodb.net/test', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose
+  .connect(
+    "mongodb+srv://avishkanuwan73:12345Avishka@cluster0.ijwojwx.mongodb.net/test"
+  )
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => console.error("Error:", err));
 
 // Routes
-app.use('/', notificationRoutes);
+app.use("/", notificationRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
