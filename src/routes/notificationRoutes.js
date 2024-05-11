@@ -7,4 +7,6 @@ router.post('/send-notification', notificationController.sendNotification);
 // get all notifications for a specific email
 router.get('/notifications', notificationController.getNotifications);
 
+router.post('/send-email', notificationController.sendOtpEmail);
+
 module.exports = router;

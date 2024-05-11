@@ -39,3 +39,26 @@ exports.getNotifications = async (req, res) => {
   }
 }
 
+
+exports.sendOtpEmail = async (req, res) => {
+  const mailBody = req.body; // Assuming the request body contains mail details
+  sendMail(mailBody);
+  res.send('Email sent successfully');
+}
+
+
+const sendMail = async (mailBody) => {
+  try {
+      // Send mail with defined transport object
+      await transporter.sendMail({
+          from: 'avishkatest123@gmail.com',
+          to: mailBody.to,
+          subject: mailBody.subject,
+          text: mailBody.text
+      });
+      console.log('Mail sent successfully');
+  } catch (error) {
+      console.error('Error sending mail:', error);
+  }
+};
+

@@ -1,15 +1,16 @@
-const express = require("express");
-const bodyParser = require("body-parser");
+const express = require('express');
+const nodemailer = require('nodemailer');
 const mongoose = require("mongoose");
+const dotenv = require('dotenv');
 const notificationRoutes = require("./src/routes/notificationRoutes");
-const dotenv = require("dotenv");
 dotenv.config();
+
+const transporter = require('./src/services/emailService');
+const { sendMail } = require('./src/controllers/notificationController');
 
 const app = express();
 const PORT = process.env.PORT ||4000;
 
-// Parse JSON bodies
-app.use(bodyParser.json());
 
 // MongoDB connection
 mongoose
@@ -17,9 +18,11 @@ mongoose
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("Error:", err));
 
-// Routes
+app.use(express.json());
+
 app.use("/", notificationRoutes);
 
+// Start the server
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+    console.log(`Node.js server is running on port ${PORT}`);
 });
