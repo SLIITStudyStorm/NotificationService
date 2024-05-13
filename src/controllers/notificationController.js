@@ -1,5 +1,6 @@
 const transporter = require('../services/emailService');
 const Notification = require('../models/notificationModel');
+const sendSMS = require('../services/smsService');
 
 exports.sendNotification = async (req, res) => {
   const notifications = req.body.notifications; // Array of notifications
@@ -39,6 +40,12 @@ exports.getNotifications = async (req, res) => {
   }
 }
 
+exports.sendSMSNotification = async (req, res) => {
+  const {numbers, message} = req.body; // numbers = [0715886675]  ||  numbers = [0715886675, 0346774384,...]        message = "Hello, this is a test message."
+
+  // Call the sendSMS function from smsService.js
+  sendSMS(numbers, message);
+}
 
 exports.sendOtpEmail = async (req, res) => {
   const mailBody = req.body; // Assuming the request body contains mail details
@@ -61,4 +68,5 @@ const sendMail = async (mailBody) => {
       console.error('Error sending mail:', error);
   }
 };
+
 
